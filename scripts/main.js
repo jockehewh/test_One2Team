@@ -11,7 +11,6 @@ if(!localStorage.bourse){
     })
     bourse = jsp(localStorage.bourse)
 }else{
-    console.log('loading...')
     bourse = jsp(localStorage.bourse)
 }
 /* window.onbeforeunload = ()=>{
@@ -196,7 +195,42 @@ class pathMaker extends React.Component{
                 }, 1000)
             }
             intervalStarter()
-                    
+            window.onload = ()=>{
+                if(localStorage.backup){
+                    var btn = document.createElement('button');
+                    btn.innerText = 'Load the last graphic'
+                    btn.classList.add('oldbtn')
+                    document.querySelector('body').appendChild(btn)
+                    btn.addEventListener('click', (e)=>{
+                        var traceur = document.querySelector('#courbes')
+                        window.backup = jsp(localStorage.backup)
+                        nasdaqFunc = backup.nasdaq
+                        cacFunc = backup.cac40
+                        Plotly.purge(traceur)
+                        window.traceNOld = {
+                            x: xAxis,
+                            y: backup.nasdaq,
+                            mode: 'lines+markers',
+                            name: "NASDAQ",
+                            line: {
+                                color: 'rgb(0,128,128)'
+                            }
+                        };
+                        window.traceCOld = {
+                            x: xAxis,
+                            y: backup.cac40,
+                            mode: 'lines+markers',
+                            name: "CAC40",
+                            line: {
+                                color: 'rgb(212,112,28)'
+                            }
+                        };
+                        Plotly.react(traceur, [window.traceNOld, window.traceCOld])
+                        renderer(j('div', {class: 'courbe'},[oldData(backup)]), document.querySelector('#main'))
+                        btn.style.display = 'none';
+                    })
+                }
+            }
     }
     render(){
         fetch("http://localhost:8000/?count=20").then(res=>{
@@ -207,46 +241,6 @@ class pathMaker extends React.Component{
         return j('div', {class: 'courbe'}, [fullChart(this.data), chartData(this.data)])
     }
 }
-
 renderer(j(pathMaker, null, null), document.querySelector('#main'))
 
-
-window.onload = ()=>{
-    if(localStorage.backup){
-        var btn = document.createElement('button');
-        btn.innerText = 'Load the last graphic'
-        btn.classList.add('oldbtn')
-        document.querySelector('body').appendChild(btn)
-        btn.addEventListener('click', (e)=>{
-            var traceur = document.querySelector('#courbes')
-            console.log('chargement')
-            backup = jsp(localStorage.backup)
-            nasdaqFunc = backup.nasdaq
-            cacFunc = backup.cac40
-            console.log(Plotly)
-            Plotly.purge(traceur)
-            window.traceNOld = {
-                x: xAxis,
-                y: backup.nasdaq,
-                mode: 'lines+markers',
-                name: "NASDAQ",
-                line: {
-                    color: 'rgb(0,128,128)'
-                }
-            };
-            window.traceCOld = {
-                x: xAxis,
-                y: backup.cac40,
-                mode: 'lines+markers',
-                name: "CAC40",
-                line: {
-                    color: 'rgb(212,112,28)'
-                }
-            };
-            Plotly.react(traceur, [window.traceNOld, window.traceCOld])
-            renderer(j('div', {class: 'courbe'},[oldData(backup)]), document.querySelector('#main'))
-            btn.style.display = 'none';
-        })
-    }
-}
 
