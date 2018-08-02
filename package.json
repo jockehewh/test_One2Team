@@ -1,0 +1,16 @@
+{
+  "name": "test_react_redux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "trr.js",
+  "dependencies": {
+    "koa": "^2.5.2",
+    "ws": "^6.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xavier bélénus",
+  "license": "ISC"
+}

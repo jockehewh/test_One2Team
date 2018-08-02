@@ -1,0 +1,31 @@
+*{margin:0; padding:0; /* user-select: none; */
+    --nasdaq-color: rgb(0,128,128);
+    --cac40-color: rgb(212,112,28);
+}
+body{
+    width: 100vmax;
+}
+.datadiv{
+    display: grid;
+    grid-template-columns: repeat(21, 1fr);
+    font-weight: bold;
+    text-align: center;
+}
+.datadiv::before{
+    content: 'heure \ nasdaq \ cac40'
+}
+.titre{
+    text-align: center;
+}
+ul{
+    list-style-type: none;
+}
+.hour{
+    font-size: 12px;
+}
+.nasdaq{
+    color: var(--nasdaq-color);
+}
+.cac40{
+    color: var(--cac40-color);
+}
