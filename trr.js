@@ -2,7 +2,6 @@ var lol = require('./server.js')
 //http://localhost:8000/?count=20
 const router = /[a-z]{2,}\.(html|css|js)/
 const Koa = require('koa');
-const WS = require('ws')
 const fs = require('fs')
 
 const trr = new Koa()
@@ -15,7 +14,6 @@ trr.use(async (ctx, next)=>{
         ctx.redirect('/index.html')
     }else{
         ctx.type = router.exec(ctx.url)[1]
-        console.log(ctx.url)
         ctx.body = fs.createReadStream('.'+ ctx.url, {autoclose:true})
     }
 })
