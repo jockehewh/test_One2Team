@@ -5,4 +5,4 @@ pour utiliser le service executez npm install:
 npm install
 npm start
 ```
-puis rendez-vous à l'adresse http://localhost:8001
+rendez-vous à l'adresse http://localhost:8001 et ouvrez la console pour voir ce qu'il s'y passe
