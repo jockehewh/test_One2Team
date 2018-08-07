@@ -5,7 +5,6 @@ const Koa = require('koa');
 const fs = require('fs')
 
 const trr = new Koa()
-const trrWS = new WS.Server({port: 8002})
 
 trr.use(async (ctx, next)=>{
     if(ctx.url === '/favicon.ico')return
