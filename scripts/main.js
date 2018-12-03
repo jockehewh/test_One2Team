@@ -17,6 +17,12 @@ if(!localStorage.bourse){
 }else{
     bourse = jsp(localStorage.bourse)
 }
+if(!localStorage.allcharts){
+    localStorage.allcharts = jss([])
+    allCharts = jsp(localStorage.allcharts)
+}else{
+    allCharts = jsp(localStorage.allcharts)
+}
 /* 
 Cette fonction met à jour le graphique
 */
@@ -137,22 +143,18 @@ function oldData(props){
                 btn.innerText = 'back to live'
                 document.querySelector('body').appendChild(btn)
                 btn.addEventListener('click', (e)=>{
+                    allCharts.push(jsp(localStorage.backup))
+                    localStorage.allcharts = jss(allCharts)
                     renderer(j(pathMaker, null, null), document.querySelector('#main'))
                     btn.style.display = "none";
                     document.querySelector('.oldbtn').style.display = "block";
                 }, false)
             return [ j('h2', {class: 'titre'}, "NASDAQ et CAC40"),
                     j('div', {class:'datadiv'}, currentDataDOM)]
-        }else{
-            console.groupCollapsed('Élément React: "oldData()" Voir plus...')
-            cli('aucune donnée n\'a été reçu')
-            console.groupEnd()
-            return j('div', {class:'datadiv'}, 'data')
         }
 }
 function chartData(props){
     var traceur = document.querySelector('#courbes')
-//new Date(date.timestamp).toLocaleString('fr-FR', { timeZone: 'UTC', year: "numeric", month:"numeric", day:"numeric" })
     if (props !== undefined && props.length != 0){
         console.groupCollapsed('Élément React: "chartData()" Voir plus...')
             cli('ittération sur les éléments enregistés dans la mémoire vive nommée "bourse"')
@@ -160,8 +162,8 @@ function chartData(props){
             cli('création et structuration des élément React')
             cli('création de la ".datadiv" qui affiche les éléments créés précédemment')
             
-        var currentDataDOM = props.map((dataNow, index)=>{
-            return j('ul', {class:'case-'+(index+1)}, [
+        var currentDataDOM = props.map((dataNow, i)=>{
+            return j('ul', {class:'case-'+(i+1)}, [
                 j('li', {class:'hour'}, new Date(dataNow.timestamp).toLocaleString('fr-FR', { timeZone: 'UTC', hour: "numeric", minute:"numeric", second:"numeric" })),
                 j('li', {class:'nasdaq', onClick: (e)=>{
                     e.target.setAttribute('contenteditable', true)
@@ -173,7 +175,7 @@ function chartData(props){
                             eb.preventDefault();
                             document.execCommand('insertHTML', false, '')
                             eb.target.setAttribute('contenteditable', false)
-                            nasdaqFunc[eb.target.dataset.index] = eb.target.innerText
+                            nasdaqFunc[eb.target.dataset.i] = eb.target.innerText
                             Plotly.redraw(traceur);
                             bourse.nasdaq = nasdaqFunc
                             localStorage.bourse = jss(bourse)
@@ -182,7 +184,7 @@ function chartData(props){
                         }
                     })
                     //fin du nasdaq
-                }, "data-index": index}, numberRounder.exec(dataNow.stocks.NASDAQ)[0]),
+                }, "data-index": i}, numberRounder.exec(dataNow.stocks.NASDAQ)[0]),
                 j('li', {class:'cac40', onClick: (e)=>{
                     e.target.setAttribute('contenteditable', true)
                     cli('modification en cours')
@@ -193,7 +195,7 @@ function chartData(props){
                             eb.preventDefault();
                             document.execCommand('insertHTML', false, '')
                             eb.target.setAttribute('contenteditable', false)
-                            cacFunc[eb.target.dataset.index] = eb.target.innerText
+                            cacFunc[eb.target.dataset.i] = eb.target.innerText
                             Plotly.redraw(traceur);
                             bourse.cac40 = cacFunc
                             localStorage.bourse = jss(bourse)
@@ -202,7 +204,7 @@ function chartData(props){
                         }
                     })
                     //fin du cac40
-                }, "data-index": index}, numberRounder.exec(dataNow.stocks.CAC40)[0])
+                }, "data-index": i}, numberRounder.exec(dataNow.stocks.CAC40)[0])
             ])
         })
         console.groupEnd()
@@ -250,6 +252,8 @@ class pathMaker extends React.Component{
                             btn.innerText = 'back to live'
                             document.querySelector('body').appendChild(btn)
                             btn.addEventListener('click', (e)=>{
+                                allCharts.push(jsp(localStorage.backup))
+                                localStorage.allcharts = jss(allCharts)
                                 //e.stopPropagation()
                                 renderer(j(pathMaker, null, null), document.querySelector('#main'))
                                 btn.style.display = "none";

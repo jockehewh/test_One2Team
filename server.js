@@ -32,7 +32,7 @@ var next = (function () {
 
 setInterval(function () {
   stocks.push (next ());
-}, 1000);
+}, 500);
 
 function tail (count) {
   if (count <= 0)

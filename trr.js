@@ -1,5 +1,4 @@
-var lol = require('./server.js')
-//http://localhost:8000/?count=20
+var serveur = require('./server.js')
 const router = /[a-z]{2,}\.(html|css|js)/
 const Koa = require('koa');
 const fs = require('fs')
